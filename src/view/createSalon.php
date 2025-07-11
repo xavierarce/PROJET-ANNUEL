@@ -1,17 +1,17 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
 
 <div class="container">
-    <h2>Créer un nouveau salon</h2>
+    <h2>Créer un nouveau Room</h2>
     <form method="post">
         <div class="form-group">
-            <input type="text" name="nom" placeholder="Nom du salon" required>
+            <input type="text" name="name" placeholder="Nom du Room" required>
         </div>
         <div class="form-group">
             <input type="text" name="topic" placeholder="Topic (optionnel)">
         </div>
         <div class="form-group checkbox-group">
             <label class="checkbox-label">
-                <input type="checkbox" name="prive" value="1"> Privé
+                <input type="checkbox" name="is_private" value="1"> Privé
             </label>
         </div>
         <button class="button" type="submit">Créer</button>
@@ -20,5 +20,5 @@
         <?php if (!empty($success)) echo '<div class="success">' . htmlspecialchars($success) . '</div>'; ?>
     </form>
 
-    <a href="index.php?action=salons" class="link-back">← Retour aux salons</a>
+    <a href="index.php?action=rooms" class="link-back">← Retour aux rooms</a>
 </div>

@@ -7,7 +7,7 @@
             <input type="text" name="login" placeholder="Login" required>
         </div>
         <div class="form-group">
-            <input type="password" name="mdp" placeholder="Mot de passe" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
         </div>
         <button class="button" type="submit">Se connecter</button>
         <?php if (!empty($error)) echo '<div class="error">' . htmlspecialchars($error) . '</div>'; ?>

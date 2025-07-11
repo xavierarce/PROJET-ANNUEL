@@ -2,7 +2,7 @@
 session_start();
 
 require_once '../controller/UserController.php';
-require_once '../controller/SalonController.php';
+require_once '../controller/RoomController.php';
 
 $action = $_GET['action'] ?? 'login';
 
@@ -17,7 +17,7 @@ if (!in_array($action, $publicRoutes) && !isset($_SESSION['user'])) {
 
 // Redirect if trying to access login/register while already logged in
 if (in_array($action, ['login', 'register']) && isset($_SESSION['user'])) {
-    header('Location: index.php?action=salons');
+    header('Location: index.php?action=rooms');
     exit;
 }
 
@@ -31,17 +31,17 @@ switch ($action) {
     case 'logout':
         (new UserController())->logout();
         break;
-    case 'salons':
-        (new SalonController())->salons();
+    case 'rooms':
+        (new RoomController())->rooms();
         break;
     case 'chat':
-        (new SalonController())->chat();
+        (new RoomController())->chat();
         break;
     case 'sendMessage':
-        (new SalonController())->sendMessage();
+        (new RoomController())->sendMessage();
         break;
-    case 'createSalon':
-        (new SalonController())->createSalon();
+    case 'createRoom':
+        (new RoomController())->createRoom();
         break;
     default:
         echo '404';
