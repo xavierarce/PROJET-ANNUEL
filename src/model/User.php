@@ -1,19 +1,20 @@
 <?php
-require_once __DIR__ . '/DB.php';
-
 class User
 {
-    public static function findByLogin($login)
+    public int $id;
+    public string $pseudo;
+    public string $login;
+    public string $password;
+    public string $email;
+    public int $roleId;
+
+    public function __construct(int $id, string $pseudo, string $login, string $password, string $email, int $roleId)
     {
-        $db = DB::connect();
-        $stmt = $db->prepare('SELECT * FROM users WHERE login = ?');
-        $stmt->execute([$login]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    public static function create($pseudo, $login, $password, $email, $role_id = 1)
-    {
-        $db = DB::connect();
-        $stmt = $db->prepare('INSERT INTO users (pseudo, login, password, email, role_id) VALUES (?, ?, ?, ?, ?)');
-        return $stmt->execute([$pseudo, $login, $password, $email, $role_id]);
+        $this->id = $id;
+        $this->pseudo = $pseudo;
+        $this->login = $login;
+        $this->password = $password;
+        $this->email = $email;
+        $this->roleId = $roleId;
     }
 }
