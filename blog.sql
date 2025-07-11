@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.27, for Linux (x86_64)
 --
--- Host: localhost    Database: bge_blog_nrb
+-- Host: localhost    Database: chat_web
 -- ------------------------------------------------------
 -- Server version	8.0.27
 
@@ -15,86 +15,65 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE DATABASE IF NOT EXISTS chat_web;
+USE chat_web;
 
---
--- Table structure for table `Role`
---
+-- Table Role
+CREATE TABLE Role (
+    pkR INT AUTO_INCREMENT PRIMARY KEY,
+    label VARCHAR(50) NOT NULL
+);
 
-DROP TABLE IF EXISTS `Role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Role` (
-  `id_role` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `label` varchar(45) COLLATE utf8mb4_bin NOT NULL,
-  PRIMARY KEY (`id_role`),
-  UNIQUE KEY `label_UNIQUE` (`label`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- Table Utilisateur
+CREATE TABLE Utilisateur (
+    pkU INT AUTO_INCREMENT PRIMARY KEY,
+    fkRole INT,
+    pseudo VARCHAR(50) NOT NULL,
+    login VARCHAR(100) NOT NULL UNIQUE,
+    mdp VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    FOREIGN KEY (fkRole) REFERENCES Role(pkR)
+);
 
---
--- Dumping data for table `Role`
---
+-- Table Salon
+CREATE TABLE Salon (
+    pkS INT AUTO_INCREMENT PRIMARY KEY,
+    fkU_proprio INT,
+    nom VARCHAR(100) NOT NULL,
+    visibilite BOOLEAN DEFAULT TRUE,
+    prive BOOLEAN DEFAULT FALSE,
+    topic VARCHAR(255),
+    FOREIGN KEY (fkU_proprio) REFERENCES Utilisateur(pkU)
+);
 
-LOCK TABLES `Role` WRITE;
-/*!40000 ALTER TABLE `Role` DISABLE KEYS */;
-INSERT INTO `Role` VALUES (3,'Administrateur'),(2,'Modérateur'),(1,'Rédacteur');
-/*!40000 ALTER TABLE `Role` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+-- Table Moderer (relation utilisateur <-> salon)
+CREATE TABLE Moderer (
+    fkU INT,
+    fkS INT,
+    PRIMARY KEY (fkU, fkS),
+    FOREIGN KEY (fkU) REFERENCES Utilisateur(pkU),
+    FOREIGN KEY (fkS) REFERENCES Salon(pkS)
+);
 
---
--- Table structure for table `Compte`
---
+-- Table Membre (relation utilisateur <-> salon)
+CREATE TABLE Membre (
+    fkU INT,
+    fkS INT,
+    PRIMARY KEY (fkU, fkS),
+    FOREIGN KEY (fkU) REFERENCES Utilisateur(pkU),
+    FOREIGN KEY (fkS) REFERENCES Salon(pkS)
+);
 
-DROP TABLE IF EXISTS `Compte`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Compte` (
-  `id_compte` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `login` varchar(127) COLLATE utf8mb4_bin NOT NULL,
-  `password` varchar(63) COLLATE utf8mb4_bin NOT NULL,
-  `pseudo` varchar(31) COLLATE utf8mb4_bin NOT NULL,
-  `dateCreation` datetime NOT NULL,
-  `dateModification` datetime NOT NULL,
-  `estSupprime` bit(1) NOT NULL,
-  `estSignale` bit(1) NOT NULL,
-  `estBanni` bit(1) NOT NULL,
-  `enAttenteDeModeration` bit(1) NOT NULL,
-  `fk_role` bigint unsigned NOT NULL,
-  PRIMARY KEY (`id_compte`),
-  UNIQUE KEY `login_UNIQUE` (`login`),
-  UNIQUE KEY `pseudo_UNIQUE` (`pseudo`),
-  KEY `fk_Compte_Role_idx` (`fk_role`),
-  CONSTRAINT `fk_Compte_Role` FOREIGN KEY (`fk_role`) REFERENCES `Role` (`id_role`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Compte`
---
-
-LOCK TABLES `Compte` WRITE;
-/*!40000 ALTER TABLE `Compte` DISABLE KEYS */;
-INSERT INTO `Compte` VALUES (1,'ced@bge.fr','azerty','cedric','2024-10-21 15:43:18','2024-10-21 15:43:18',_binary '\0',_binary '\0',_binary '\0',_binary '\0',3),(2,'toto@test.com','AZERTY','toto','2024-10-24 11:10:28','2024-10-24 11:10:28',_binary '\0',_binary '\0',_binary '\0',_binary '',1),(20,'toto@google.com','AZERTY','totooooo','2024-10-25 09:10:45','2024-10-25 09:10:45',_binary '\0',_binary '\0',_binary '\0',_binary '',1),(33,'hash@google.com','$2y$10$5QJWhA6tz7I.yc.hiICDieEWMCi4I8lK4HcLud3CXGvhtkUZz0VH6','hash','2024-10-25 11:10:32','2024-10-25 11:10:32',_binary '\0',_binary '\0',_binary '\0',_binary '',1),(47,'hashddd@google.com','$2y$10$DmJ2AVv6o6JwBsSBRq0KBOU.eL1kCFnA.li0JKCIahBZ/XXUMxKFO','hashsss','2024-10-30 03:10:09','2024-10-30 03:10:09',_binary '\0',_binary '\0',_binary '\0',_binary '',1),(50,'hashmmmmm@google.com','$2y$10$xxwar4UYIsA1aYFf0CICUuNSF9P8gqbRF59lJx7T/xsBSQOnBp2y2','hashmmmmm','2024-10-30 04:10:43','2024-10-30 04:10:43',_binary '\0',_binary '\0',_binary '\0',_binary '',1),(51,'prosper@youpla.boom','$2y$10$NLT/D5iRy5zub9omiUffwOFlf/xfnrO6xZXHx1Fu/WRSJqjZBo5Bi','Prosper Youpla Boom','2025-05-21 10:05:35','2025-05-21 10:05:35',_binary '\0',_binary '\0',_binary '\0',_binary '',1);
-/*!40000 ALTER TABLE `Compte` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Configuration`
---
-
-DROP TABLE IF EXISTS `Configuration`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Configuration` (
-  `configuration` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(128) COLLATE utf8mb4_bin NOT NULL,
-  `value` varchar(16183) COLLATE utf8mb4_bin NOT NULL,
-  PRIMARY KEY (`configuration`),
-  UNIQUE KEY `key_UNIQUE` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- Table Message
+CREATE TABLE Message (
+    pkMsg INT AUTO_INCREMENT PRIMARY KEY,
+    fkU INT,
+    fkS INT,
+    message TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fkU) REFERENCES Utilisateur(pkU),
+    FOREIGN KEY (fkS) REFERENCES Salon(pkS)
+);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -103,5 +82,3 @@ CREATE TABLE `Configuration` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-05-22 18:07:22
