@@ -1,22 +1,26 @@
 <?php
-require_once __DIR__ . '/../model/User.php';
+require_once __DIR__ . '/../dao/UserDAO.php';
 
 class UserService
 {
-    public static function login($login, $password)
+    public function login(string $login, string $password): ?User
     {
-        $user = User::findByLogin($login);
-        if ($user && password_verify($password, $user['password'])) {
+        $user = UserDAO::findByLogin($login);
+        if ($user && password_verify($password, $user->password)) {
             return $user;
         }
         return null;
     }
-    public static function register($pseudo, $login, $password, $email)
+
+    /**
+     * @throws Exception if login already exists
+     */
+    public function register(string $pseudo, string $login, string $password, string $email): bool
     {
-        if (User::findByLogin($login)) {
-            return 'Login déjà utilisé';
+        if (UserDAO::findByLogin($login) !== null) {
+            throw new Exception('Login déjà utilisé');
         }
-        User::create($pseudo, $login, password_hash($password, PASSWORD_DEFAULT), $email);
-        return true;
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        return UserDAO::create($pseudo, $login, $hashedPassword, $email);
     }
 }

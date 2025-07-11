@@ -1,20 +1,18 @@
 <?php
-// Classe messages pour la gestion des messages
-require_once __DIR__ . '/DB.php';
-
 class Message
 {
-    public static function getByRoom($room_id)
+    public int $id;
+    public int $user_id;
+    public int $room_id;
+    public string $message;
+    public string $timestamp;
+
+    public function __construct($id, $user_id, $room_id, $message, $timestamp)
     {
-        $db = DB::connect();
-        $stmt = $db->prepare('SELECT m.*, u.pseudo FROM messages m JOIN users u ON m.user_id = u.id WHERE room_id = ? ORDER BY timestamp ASC');
-        $stmt->execute([$room_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    public static function add($user_id, $room_id, $message)
-    {
-        $db = DB::connect();
-        $stmt = $db->prepare('INSERT INTO messages (user_id, room_id, message) VALUES (?, ?, ?)');
-        return $stmt->execute([$user_id, $room_id, $message]);
+        $this->id = $id;
+        $this->user_id = $user_id;
+        $this->room_id = $room_id;
+        $this->message = $message;
+        $this->timestamp = $timestamp;
     }
 }

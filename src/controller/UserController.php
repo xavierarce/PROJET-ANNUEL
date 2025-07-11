@@ -3,10 +3,17 @@ require_once __DIR__ . '/../service/UserService.php';
 
 class UserController
 {
+    private UserService $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
+
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = UserService::login($_POST['login'], $_POST['password']);
+            $user = $this->userService->login($_POST['login'], $_POST['password']);
             if ($user) {
                 $_SESSION['user'] = $user;
                 header('Location: index.php?action=rooms');
@@ -19,13 +26,14 @@ class UserController
             require __DIR__ . '/../view/login.php';
         }
     }
+
     public function logout()
     {
-
         session_destroy();
         header('Location: index.php?action=login');
         exit;
     }
+
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,12 +41,13 @@ class UserController
             $login = $_POST['login'] ?? '';
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
+
             if ($pseudo && $login && $email && $password) {
-                $result = UserService::register($pseudo, $login, $password, $email);
-                if ($result === true) {
+                try {
+                    $this->userService->register($pseudo, $login, $password, $email);
                     $success = 'Inscription réussie, vous pouvez vous connecter.';
-                } else {
-                    $error = $result;
+                } catch (Exception $e) {
+                    $error = $e->getMessage();
                 }
             } else {
                 $error = 'Tous les champs sont obligatoires';
