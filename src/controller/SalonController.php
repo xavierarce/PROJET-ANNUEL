@@ -1,19 +1,19 @@
 <?php
-// Contrôleur pour la gestion des salons
+// Contrôleur pour la gestion des rooms
 
-require_once __DIR__ . '/../model/Salon.php';
+require_once __DIR__ . '/../model/Room.php';    // modèle Room, pas Room
 require_once __DIR__ . '/../model/Message.php';
 
-class SalonController
+class RoomController
 {
-    public function salons()
+    public function rooms()
     {
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?action=login');
             exit;
         }
-        $salons = Salon::getAll();
-        require __DIR__ . '/../view/salons.php';
+        $rooms = Room::getAll();
+        require __DIR__ . '/../view/rooms.php';
     }
     public function chat()
     {
@@ -21,43 +21,45 @@ class SalonController
             header('Location: index.php?action=login');
             exit;
         }
-        $salon = Salon::getById($_GET['id'] ?? 1);
-        $messages = Message::getBySalon($salon['pkS']);
+        $roomId = $_GET['id'] ?? 1;
+        $room = Room::getById($roomId);
+        $messages = Message::getByRoom($roomId);
         require __DIR__ . '/../view/chat.php';
     }
+
     public function sendMessage()
     {
         if (isset($_SESSION['user'], $_POST['message'], $_GET['id'])) {
-            Message::add($_SESSION['user']['pkU'], $_GET['id'], $_POST['message']);
+            Message::add($_SESSION['user']['id'], $_GET['id'], $_POST['message']);
         }
         header('Location: index.php?action=chat&id=' . $_GET['id']);
         exit;
     }
-    public function createSalon()
+    public function createRoom()
     {
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?action=login');
             exit;
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = $_POST['nom'] ?? '';
+            $name = $_POST['name'] ?? '';
             $topic = $_POST['topic'] ?? '';
-            $prive = isset($_POST['prive']) ? 1 : 0;
-            if ($nom) {
-                $id = Salon::create($nom, $_SESSION['user']['pkU'], $topic, $prive);
+            $is_private = isset($_POST['is_private']) ? 1 : 0;
+            if ($name) {
+                $id = Room::create($name, $_SESSION['user']['id'], $topic, $is_private);
                 if ($id) {
-                    $success = 'Salon créé !';
-                    header('Location: index.php?action=salons');
+                    $success = 'Room créé !';
+                    header('Location: index.php?action=rooms');
                     exit;
                 } else {
                     $error = 'Erreur lors de la création.';
                 }
             } else {
-                $error = 'Le nom est obligatoire';
+                $error = 'Le nom est obligatoire.';
             }
-            require __DIR__ . '/../view/createSalon.php';
+            require __DIR__ . '/../view/createRoom.php';
         } else {
-            require __DIR__ . '/../view/createSalon.php';
+            require __DIR__ . '/../view/createRoom.php';
         }
     }
 }

@@ -6,10 +6,10 @@ class UserController
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = UserService::login($_POST['login'], $_POST['mdp']);
+            $user = UserService::login($_POST['login'], $_POST['password']);
             if ($user) {
                 $_SESSION['user'] = $user;
-                header('Location: index.php?action=salons');
+                header('Location: index.php?action=rooms');
                 exit;
             } else {
                 $error = 'Identifiants incorrects';
@@ -32,9 +32,9 @@ class UserController
             $pseudo = $_POST['pseudo'] ?? '';
             $login = $_POST['login'] ?? '';
             $email = $_POST['email'] ?? '';
-            $mdp = $_POST['mdp'] ?? '';
-            if ($pseudo && $login && $email && $mdp) {
-                $result = UserService::register($pseudo, $login, $mdp, $email);
+            $password = $_POST['password'] ?? '';
+            if ($pseudo && $login && $email && $password) {
+                $result = UserService::register($pseudo, $login, $password, $email);
                 if ($result === true) {
                     $success = 'Inscription réussie, vous pouvez vous connecter.';
                 } else {

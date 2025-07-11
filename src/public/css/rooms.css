@@ -1,5 +1,5 @@
 /* Center the entire page content vertically and horizontally */
-.salons-page {
+.rooms-page {
   min-height: 100vh;
   background-color: var(--color-bg);
   display: flex;
@@ -10,7 +10,7 @@
 }
 
 /* Card container with fixed width, centered content */
-.salons-card {
+.rooms-card {
   width: 480px;
   background: var(--color-white);
   padding: 2.5rem 2rem;
@@ -23,26 +23,26 @@
 }
 
 /* Title centered */
-.salons-card h2 {
+.rooms-card h2 {
   text-align: center;
   font-size: 1.8rem;
   margin: 0;
 }
 
-/* Salon list - no bullets, centered text */
-.salon-list {
+/* rooms list - no bullets, centered text */
+.Room-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Each salon item with vertical spacing */
-.salon-item {
+/* Each Room item with vertical spacing */
+.Room-item {
   margin-bottom: 0.75rem;
 }
 
-/* Salon links styled simply, centered text */
-.salon-item a {
+/* rooms links styled simply, centered text */
+.Room-item a {
   color: var(--color-text);
   font-weight: 500;
   font-size: 1.1rem;
@@ -53,7 +53,7 @@
   transition: color 0.2s ease;
 }
 
-.salon-item a:hover {
+.Room-item a:hover {
   color: var(--color-primary);
 }
 

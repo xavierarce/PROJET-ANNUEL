@@ -13,7 +13,7 @@
       <input type="text" name="email" type="email" placeholder="Email" required>
     </div>
     <div class="form-group">
-      <input name="mdp" type="password" placeholder="Mot de passe" required>
+      <input name="password" type="password" placeholder="Mot de passe" required>
     </div>
     <button class="button" type="submit">S'inscrire</button>
     <?php if (!empty($error)) echo '<div style="color:red">' . $error . '</div>'; ?>

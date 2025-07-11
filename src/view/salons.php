@@ -1,18 +1,18 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
 
-<div class="salons-page">
-  <div class="salons-card">
-    <h2>Salons</h2>
+<div class="rooms-page">
+  <div class="rooms-card">
+    <h2>Rooms</h2>
 
-    <a href="index.php?action=createSalon" class="button">+ Créer un nouveau salon</a>
+    <a href="index.php?action=createRoom" class="button">+ Créer un nouveau Room</a>
 
-    <ul class="salon-list">
-      <?php foreach ($salons as $salon): ?>
-      <li class="salon-item">
-        <a href="index.php?action=chat&id=<?= $salon['pkS'] ?>">
-          <?= htmlspecialchars($salon['nom']) ?>
-        </a>
-      </li>
+    <ul class="Room-list">
+      <?php foreach ($rooms as $Room): ?>
+        <li class="Room-item">
+          <a href="index.php?action=chat&id=<?= $Room['id'] ?>">
+            <?= htmlspecialchars($Room['name']) ?>
+          </a>
+        </li>
       <?php endforeach; ?>
     </ul>
 

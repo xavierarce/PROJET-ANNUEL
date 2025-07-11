@@ -1,22 +1,26 @@
 <?php
-// Classe Salon pour la gestion des salons
+// Classe rooms pour la gestion des rooms
 require_once __DIR__ . '/DB.php';
 
-class Salon {
-    public static function getAll() {
+class Room
+{
+    public static function getAll()
+    {
         $db = DB::connect();
-        return $db->query('SELECT * FROM Salon')->fetchAll(PDO::FETCH_ASSOC);
+        return $db->query('SELECT * FROM rooms')->fetchAll(PDO::FETCH_ASSOC);
     }
-    public static function getById($id) {
+    public static function getById($id)
+    {
         $db = DB::connect();
-        $stmt = $db->prepare('SELECT * FROM Salon WHERE pkS = ?');
+        $stmt = $db->prepare('SELECT * FROM rooms WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public static function create($nom, $fkU_proprio, $topic = '', $prive = 0) {
+    public static function create($name, $owner_id, $topic = '', $is_private = 0)
+    {
         $db = DB::connect();
-        $stmt = $db->prepare('INSERT INTO Salon (nom, fkU_proprio, topic, prive) VALUES (?, ?, ?, ?)');
-        if ($stmt->execute([$nom, $fkU_proprio, $topic, $prive])) {
+        $stmt = $db->prepare('INSERT INTO rooms (name, owner_id, topic, is_private) VALUES (?, ?, ?, ?)');
+        if ($stmt->execute([$name, $owner_id, $topic, $is_private])) {
             return $db->lastInsertId();
         }
         return false;
