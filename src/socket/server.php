@@ -2,7 +2,7 @@
 // src/socket/server.php
 
 // This resolves to /var/www/html/vendor/autoload.php
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 require __DIR__ . '/ChatServer.php';
 

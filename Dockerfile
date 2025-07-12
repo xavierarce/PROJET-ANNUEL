@@ -6,11 +6,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 
 RUN a2enmod rewrite
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 WORKDIR /var/www/html
 
-# Install Ratchet (WebSocket lib)
-RUN composer require cboden/ratchet
-
+# Copy your full source code including vendor from local
+COPY ./src/ ./

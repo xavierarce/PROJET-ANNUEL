@@ -7,7 +7,6 @@ services:
       - "8000:80"
     volumes:
       - ./src:/var/www/html
-      - ./vendor:/var/www/html/vendor
     depends_on:
       - db
     env_file:
@@ -15,12 +14,11 @@ services:
 
   websocket:
     build: .
-    command: php /var/www/html/src/socket/server.php
+    command: php /var/www/html/socket/server.php
     ports:
       - "8081:8080"
     volumes:
-      - ./src:/var/www/html/src
-      - ./vendor:/var/www/html/vendor # <-- mount vendor here
+      - ./src:/var/www/html
     depends_on:
       - db
 
