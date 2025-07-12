@@ -21,7 +21,8 @@ services:
       - .env
     volumes:
       - db_data:/var/lib/mysql
-      - ./blog.sql:/docker-entrypoint-initdb.d/blog.sql:ro
+      - ./schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./seed.sql:/docker-entrypoint-initdb.d/002-seed.sql:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
