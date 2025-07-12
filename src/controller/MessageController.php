@@ -3,16 +3,6 @@ require_once __DIR__ . '/../service/MessageService.php';
 
 class MessageController
 {
-  public function chat()
-  {
-    if (!isset($_SESSION['user'])) {
-      header('Location: index.php?action=login');
-      exit;
-    }
-    $roomId = $_GET['id'] ?? 1;
-    $messages = MessageService::getMessagesByRoom($roomId);
-    require __DIR__ . '/../view/chat.php';
-  }
 
   public function sendMessage()
   {

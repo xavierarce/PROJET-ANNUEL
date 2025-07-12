@@ -15,7 +15,7 @@ class UserController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->userService->login($_POST['login'], $_POST['password']);
             if ($user) {
-                $_SESSION['user'] = $user;
+                $_SESSION['user'] = $user->toArray();
                 header('Location: index.php?action=rooms');
                 exit;
             } else {
