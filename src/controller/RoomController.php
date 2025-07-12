@@ -42,14 +42,6 @@ class RoomController
         require __DIR__ . '/../view/chat.php';
     }
 
-    public function sendMessage()
-    {
-        if (isset($_SESSION['user'], $_POST['message'], $_GET['id'])) {
-            MessageService::sendMessage($_SESSION['user']['id'], (int)$_GET['id'], $_POST['message']);
-        }
-        header('Location: index.php?action=chat&id=' . (int)$_GET['id']);
-        exit;
-    }
 
     public function createRoom()
     {

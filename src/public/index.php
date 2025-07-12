@@ -3,6 +3,7 @@ session_start();
 
 require_once '../controller/UserController.php';
 require_once '../controller/RoomController.php';
+require_once '../controller/MessageController.php';
 
 $action = $_GET['action'] ?? 'login';
 
@@ -38,7 +39,7 @@ switch ($action) {
         (new RoomController())->chat();
         break;
     case 'sendMessage':
-        (new RoomController())->sendMessage();
+        (new MessageController())->sendMessage();
         break;
     case 'createRoom':
         (new RoomController())->createRoom();

@@ -17,4 +17,28 @@ class User
         $this->email = $email;
         $this->roleId = $roleId;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'pseudo' => $this->pseudo,
+            'login' => $this->login,
+            'email' => $this->email,
+            'roleId' => $this->roleId,
+            // Do NOT include password here, for security
+        ];
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['id'],
+            $data['pseudo'],
+            $data['login'],
+            '', // Password not stored in session
+            $data['email'],
+            $data['roleId']
+        );
+    }
 }
