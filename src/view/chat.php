@@ -1,20 +1,23 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
+<?php require __DIR__ . '/partials/edit-room-modal.php'; ?>
 
 <?php if (!isset($room) || !is_object($room)): ?>
-<div class="error">Erreur : Aucune salle trouvée.</div>
-<?php return; ?>
+  <div class="error">Erreur : Aucune salle trouvée.</div>
+  <?php return; ?>
 <?php endif; ?>
 
 <div class="container chat-container">
-  <h2>Salon: <?= htmlspecialchars($room->name) ?></h2>
+  <h2>Salon: <?= htmlspecialchars($room->name) ?>
+    <button class="button-secondary" id="editRoomBtn">✏️</button>
+  </h2>
 
   <div class="messages">
     <?php foreach ($messages as $msg): ?>
-    <div class="message">
-      <b><?= htmlspecialchars($msg['pseudo']) ?>:</b>
-      <span class="msg-text"><?= htmlspecialchars($msg['message']) ?></span>
-      <i class="msg-time">(<?= $msg['timestamp'] ?>)</i>
-    </div>
+      <div class="message">
+        <b><?= htmlspecialchars($msg['pseudo']) ?>:</b>
+        <span class="msg-text"><?= htmlspecialchars($msg['message']) ?></span>
+        <i class="msg-time">(<?= $msg['timestamp'] ?>)</i>
+      </div>
     <?php endforeach; ?>
   </div>
 
@@ -27,7 +30,8 @@
 </div>
 
 <script>
-const roomId = <?= json_encode($room->id) ?>;
-const userPseudo = <?= json_encode($_SESSION['user']['pseudo']) ?>;
+  const roomId = <?= json_encode($room->id) ?>;
+  const userPseudo = <?= json_encode($_SESSION['user']['pseudo']) ?>;
 </script>
-<script src="/public/script.js"></script>
+<script src="/public/js/script.js"></script>
+<script src="/public/js/modal.js"></script>

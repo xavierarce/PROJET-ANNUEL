@@ -1,4 +1,5 @@
 @import url("base.css");
-@import url("form.css"); /* will include rooms.css later */
+@import url("form.css");
+@import url("modal.css");
 @import url("rooms.css");
 @import url("chat.css");

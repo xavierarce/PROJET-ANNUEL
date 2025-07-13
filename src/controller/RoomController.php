@@ -100,4 +100,28 @@ class RoomController extends BaseController
         $this->redirect('rooms');
         exit;
     }
+
+    public function updateRoom(): void
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?action=login');
+            exit;
+        }
+
+        $roomId = $_GET['id'] ?? null;
+        $newName = trim($_POST['new_name'] ?? '');
+        $isPrivate = isset($_POST['is_private']) ? (bool)$_POST['is_private'] : false;
+        $userId = $_SESSION['user']['id'];
+
+        try {
+            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate);
+            $_SESSION['success'] = "Salon mis à jour.";
+            header("Location: index.php?action=chat&id=" . urlencode($roomId));
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            header("Location: index.php?action=chat&id=" . urlencode($roomId));
+        }
+
+        exit;
+    }
 }
