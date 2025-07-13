@@ -10,8 +10,8 @@ INSERT INTO users (id, role_id, pseudo, login, password, email) VALUES
 (3, 1, 'Xavier', 'Xavier', '$2y$10$bfnrHwsbPcrKWGNwdOdUTeomWN/q0O530wiADKP7oKLg410wrlQAK', 'xavier@gmail.com');
 
 INSERT INTO rooms (id, owner_id, name, is_visible, is_private, topic) VALUES
-(1, 1, 'nathanLeGay', 1, 0, 'testtt'),
-(2, 1, 'ahahahaha', 1, 0, 'hahahaaXDDDXDX');
+(1, 1, 'Hello World', 1, 0, 'Interesant'),
+(2, 1, 'Room 2', 1, 0, 'Hello!');
 
 INSERT INTO messages (id, user_id, room_id, message, timestamp) VALUES
 (1, 1, 1, 'Salut', '2025-07-04 14:53:02'),
