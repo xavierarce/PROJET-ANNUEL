@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../service/UserService.php';
+require_once __DIR__ . '/BaseController.php';
 
-class UserController
+class UserController extends BaseController
 {
     private UserService $userService;
 
@@ -20,7 +21,7 @@ class UserController
         $user = $this->userService->login($_POST['login'], $_POST['password']);
         if ($user) {
             $_SESSION['user'] = $user->toArray();
-            header('Location: index.php?action=rooms');
+            $this->redirect('rooms');
             exit;
         } else {
             $error = 'Identifiants incorrects';
@@ -31,7 +32,7 @@ class UserController
     public function logout()
     {
         session_destroy();
-        header('Location: index.php?action=login');
+        $this->redirect('login');
         exit;
     }
 
@@ -53,6 +54,7 @@ class UserController
             try {
                 $this->userService->register($pseudo, $login, $password, $email);
                 $success = 'Inscription réussie, vous pouvez vous connecter.';
+                $this->redirect('login');
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }

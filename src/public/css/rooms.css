@@ -61,7 +61,7 @@
 .button.danger {
   background: transparent;
   border: none;
-  color: #e63946;
+  color: var(--color-error);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0;
@@ -80,7 +80,7 @@
 
 .logout-link {
   margin-top: 1.5rem;
-  color: var(--color-error);
+  color: var(--color-danger);
   font-weight: 500;
   text-align: center;
   display: block;
@@ -90,6 +90,6 @@
 }
 
 .logout-link:hover {
-  color: #b92b3f;
+  color: var(--color-danger-hover);
   text-decoration: underline;
 }

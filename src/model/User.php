@@ -4,7 +4,7 @@ class User
     public int $id;
     public string $pseudo;
     public string $login;
-    public string $password;
+    private string $password;
     public string $email;
     public int $role_id;
 
@@ -25,20 +25,12 @@ class User
             'pseudo' => $this->pseudo,
             'login' => $this->login,
             'email' => $this->email,
-        'role_id' => $this->role_id, // Changed key to snake_case
-            // Do NOT include password here, for security
+            'role_id' => $this->role_id,
         ];
     }
 
-    public static function fromArray(array $data): self
+    public function verifyPassword(string $plainPassword): bool
     {
-        return new self(
-            $data['id'],
-            $data['pseudo'],
-            $data['login'],
-            '', // Password not stored in session
-            $data['email'],
-            $data['role_id']
-        );
+        return password_verify($plainPassword, $this->password);
     }
 }

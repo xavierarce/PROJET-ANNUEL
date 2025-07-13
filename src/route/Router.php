@@ -6,54 +6,65 @@ require_once __DIR__ . '/../controller/MessageController.php';
 
 class Router
 {
-  private $routes = [];
+  private array $routes = [];
+  private array $publicActions = ['login', 'register', 'logout', 'rooms'];
 
   public function __construct()
   {
-    // Public routes
-    $this->routes['GET']['login'] = [UserController::class, 'login'];
-    $this->routes['POST']['login'] = [UserController::class, 'handleLogin'];
-
-
-    $this->routes['GET']['register'] = [UserController::class, 'register'];
-    $this->routes['POST']['register'] = [UserController::class, 'handleRegister'];
-
-    $this->routes['GET']['logout'] = [UserController::class, 'logout'];
-
-    // Protected routes
-    $this->routes['GET']['rooms'] = [RoomController::class, 'rooms'];
-    $this->routes['GET']['chat'] = [RoomController::class, 'chat'];
-    $this->routes['GET']['createRoom'] = [RoomController::class, 'showCreateRoomForm'];
-    $this->routes['POST']['createRoom'] = [RoomController::class, 'handleCreateRoom'];
-    $this->routes['POST']['archiveRoom'] = [RoomController::class, 'archiveRoom'];
-    $this->routes['POST']['sendMessage'] = [MessageController::class, 'sendMessage'];
+    $this->mapRoutes();
   }
 
-  public function handleRequest(string $method, string $action): void
+  private function mapRoutes(): void
+  {
+    $this->routes = [
+      'GET' => [
+        'login'       => [UserController::class, 'login'],
+        'register'    => [UserController::class, 'register'],
+        'logout'      => [UserController::class, 'logout'],
+        'rooms'       => [RoomController::class, 'rooms'],
+        'chat'        => [RoomController::class, 'chat'],
+        'createRoom'  => [RoomController::class, 'showCreateRoomForm'],
+      ],
+      'POST' => [
+        'login'       => [UserController::class, 'handleLogin'],
+        'register'    => [UserController::class, 'handleRegister'],
+        'createRoom'  => [RoomController::class, 'handleCreateRoom'],
+        'archiveRoom' => [RoomController::class, 'archiveRoom'],
+        'sendMessage' => [MessageController::class, 'sendMessage'],
+      ],
+    ];
+  }
+
+  public function handleRequest(string $method, ?string $action): void
   {
     $method = strtoupper($method);
     $action = $action ?: 'login';
+    $isPublic = in_array($action, $this->publicActions);
+    $isLogged = isset($_SESSION['user']);
 
-    // Auth check
-    $public = ['login', 'register', 'logout'];
-    $isPublic = in_array($action, $public);
-
-    if (!$isPublic && !isset($_SESSION['user'])) {
-      header('Location: index.php?action=login');
-      exit;
+    if (!$isPublic && !$isLogged) {
+      $this->redirect('login');
+      return;
     }
 
-    if ($isPublic && isset($_SESSION['user']) && in_array($action, ['login', 'register'])) {
-      header('Location: index.php?action=rooms');
-      exit;
+    if ($isPublic && $isLogged && in_array($action, ['login', 'register'])) {
+      $this->redirect('rooms');
+      return;
     }
+
 
     if (isset($this->routes[$method][$action])) {
-      [$controller, $methodName] = $this->routes[$method][$action];
-      (new $controller())->$methodName();
+      [$controller, $fn] = $this->routes[$method][$action];
+      (new $controller())->$fn();
     } else {
       http_response_code(404);
       echo "404 - Route [$method $action] not found";
     }
+  }
+
+  private function redirect(string $to): void
+  {
+    header("Location: index.php?action=$to");
+    exit;
   }
 }

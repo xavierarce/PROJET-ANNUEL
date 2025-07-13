@@ -1,15 +1,17 @@
 :root {
-  --color-primary: #007bff;
-  --color-primary-hover: #0062cc;
-  --color-bg: #f5f7fa;
-  --color-text: #1c1e21;
-  --color-error: #e63946;
-  --color-success: #2ecc71;
+  --color-primary: #00b8d9; /* Bleu cyan */
+  --color-primary-hover: #0097b2; /* Bleu foncé */
+  --color-bg: #f0faff; /* Fond très pâle bleu */
+  --color-text: #1c2731; /* Bleu-noir doux */
+  --color-error: #ff5e57; /* Rouge corail */
+  --color-success: #28c76f; /* Vert frais */
   --color-white: #ffffff;
-  --color-border: #dfe3e8;
+  --color-border: #dce3ea;
+  --color-danger: #e24c4b;
+  --color-danger-hover: #c13a3a;
 
   --radius: 8px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --transition: all 0.2s ease;
 }
 
@@ -44,7 +46,7 @@ a:hover {
   border: none;
   border-radius: var(--radius);
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-white);
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
@@ -52,13 +54,12 @@ a:hover {
   text-align: center;
   white-space: nowrap;
   line-height: 1.2;
-  text-decoration: none;
 }
 
 .button:hover {
   background-color: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .button:active {
@@ -72,7 +73,7 @@ a:hover {
 }
 
 .button--ghost:hover {
-  background-color: var(--color-bg);
+  background-color: var(--color-white);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
