@@ -1,5 +1,5 @@
 
-# 💬 Chat Web App
+# 💬 Chat Web 2.0
 
 A simple PHP chat application using a 4-tier architecture (Controller → Service → DAO → Model), powered by **Docker**, **MySQL**, and **Apache**.
 
