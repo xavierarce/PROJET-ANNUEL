@@ -1,49 +1,7 @@
 <?php
 session_start();
 
-require_once '../controller/UserController.php';
-require_once '../controller/RoomController.php';
-require_once '../controller/MessageController.php';
+require_once __DIR__ . '/../route/Router.php';
 
-$action = $_GET['action'] ?? 'login';
-
-// Routes that don't require login
-$publicRoutes = ['login', 'register', 'logout'];
-
-// Redirect if trying to access protected routes while not logged in
-if (!in_array($action, $publicRoutes) && !isset($_SESSION['user'])) {
-    header('Location: index.php?action=login');
-    exit;
-}
-
-// Redirect if trying to access login/register while already logged in
-if (in_array($action, ['login', 'register']) && isset($_SESSION['user'])) {
-    header('Location: index.php?action=rooms');
-    exit;
-}
-
-switch ($action) {
-    case 'login':
-        (new UserController())->login();
-        break;
-    case 'register':
-        (new UserController())->register();
-        break;
-    case 'logout':
-        (new UserController())->logout();
-        break;
-    case 'rooms':
-        (new RoomController())->rooms();
-        break;
-    case 'chat':
-        (new RoomController())->chat();
-        break;
-    case 'sendMessage':
-        (new MessageController())->sendMessage();
-        break;
-    case 'createRoom':
-        (new RoomController())->createRoom();
-        break;
-    default:
-        echo '404';
-}
+$router = new Router();
+$router->handleRequest($_SERVER['REQUEST_METHOD'], $_GET['action'] ?? '');
