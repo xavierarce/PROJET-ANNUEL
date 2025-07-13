@@ -23,10 +23,10 @@ class UserDAO
     return null;
   }
 
-  public static function create(string $pseudo, string $login, string $password, string $email, int $roleId = 1): bool
+  public static function create(string $pseudo, string $login, string $password, string $email, int $role_id = 1): bool
   {
     $db = DB::connect();
     $stmt = $db->prepare('INSERT INTO users (pseudo, login, password, email, role_id) VALUES (?, ?, ?, ?, ?)');
-    return $stmt->execute([$pseudo, $login, $password, $email, $roleId]);
+    return $stmt->execute([$pseudo, $login, $password, $email, $role_id]);
   }
 }

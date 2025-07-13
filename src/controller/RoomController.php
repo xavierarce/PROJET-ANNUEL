@@ -17,9 +17,11 @@ class RoomController
             header('Location: index.php?action=login');
             exit;
         }
-        $rooms = $this->roomService->getAllRooms();
+
+        $rooms = $this->roomService->getAllVisibleRooms(); // update this method in RoomService/DAO
         require __DIR__ . '/../view/rooms.php';
     }
+
 
     public function chat()
     {
@@ -31,9 +33,8 @@ class RoomController
         $roomId = (int)($_GET['id'] ?? 1);
         $room = $this->roomService->getRoomById($roomId);
 
-        if ($room === null) {
-            header('HTTP/1.0 404 Not Found');
-            echo 'Room not found';
+        if ($room === null || $room->is_archived) {
+            header('Location: index.php?action=login');
             exit;
         }
 
@@ -43,27 +44,63 @@ class RoomController
     }
 
 
-    public function createRoom()
+    public function showCreateRoomForm()
     {
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?action=login');
             exit;
         }
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
-            $topic = $_POST['topic'] ?? '';
-            $isPrivate = isset($_POST['is_private']);
 
+        require __DIR__ . '/../view/createRoom.php';
+    }
+
+    public function handleCreateRoom()
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?action=login');
+            exit;
+        }
+
+        $name = $_POST['name'] ?? '';
+        $topic = $_POST['topic'] ?? '';
+        $is_private = isset($_POST['is_private']);
+
+        try {
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $is_private);
+            header('Location: index.php?action=rooms');
+            exit;
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+            require __DIR__ . '/../view/createRoom.php';
+        }
+    }
+
+
+    public function archiveRoom()
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?action=login');
+            exit;
+        }
+
+        $user = $_SESSION['user'];
+
+        if ($user['role_id'] !== 1) { // 1 = Admin
+            http_response_code(403);
+            echo "Vous n'avez pas les droits pour archiver une salle.";
+            exit;
+        }
+
+        $roomId = $_POST['room_id'] ?? null;
+        if ($roomId) {
             try {
-                $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate);
-                header('Location: index.php?action=rooms');
-                exit;
+                $this->roomService->archiveRoom((int)$roomId);
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
-            require __DIR__ . '/../view/createRoom.php';
-        } else {
-            require __DIR__ . '/../view/createRoom.php';
         }
+
+        header('Location: index.php?action=rooms');
+        exit;
     }
 }

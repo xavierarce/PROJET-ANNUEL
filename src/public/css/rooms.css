@@ -1,15 +1,13 @@
-/* Center the entire page content vertically and horizontally */
 .rooms-page {
   min-height: 100vh;
   background-color: var(--color-bg);
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: center; /* center vertically */
-  padding: 0 1rem; /* small horizontal padding on small screens */
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
   box-sizing: border-box;
 }
 
-/* Card container with fixed width, centered content */
 .rooms-card {
   width: 480px;
   background: var(--color-white);
@@ -22,42 +20,64 @@
   box-sizing: border-box;
 }
 
-/* Title centered */
 .rooms-card h2 {
   text-align: center;
   font-size: 1.8rem;
   margin: 0;
 }
 
-/* rooms list - no bullets, centered text */
 .Room-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Each Room item with vertical spacing */
 .Room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-light);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   margin-bottom: 0.75rem;
 }
 
-/* rooms links styled simply, centered text */
 .Room-item a {
   color: var(--color-text);
   font-weight: 500;
   font-size: 1.1rem;
   text-decoration: none;
-  display: block;
-  text-align: center;
-  padding: 0.5rem 0;
-  transition: color 0.2s ease;
+  flex-grow: 1;
 }
 
 .Room-item a:hover {
   color: var(--color-primary);
 }
 
-/* Logout link centered with spacing */
+.Room-item form {
+  margin: 0;
+}
+
+.button.danger {
+  background: transparent;
+  border: none;
+  color: #e63946;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.button.danger:hover {
+  border-radius: 4px;
+}
+
 .logout-link {
   margin-top: 1.5rem;
   color: var(--color-error);

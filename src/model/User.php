@@ -6,16 +6,16 @@ class User
     public string $login;
     public string $password;
     public string $email;
-    public int $roleId;
+    public int $role_id;
 
-    public function __construct(int $id, string $pseudo, string $login, string $password, string $email, int $roleId)
+    public function __construct(int $id, string $pseudo, string $login, string $password, string $email, int $role_id)
     {
         $this->id = $id;
         $this->pseudo = $pseudo;
         $this->login = $login;
         $this->password = $password;
         $this->email = $email;
-        $this->roleId = $roleId;
+        $this->role_id = $role_id;
     }
 
     public function toArray(): array
@@ -25,7 +25,7 @@ class User
             'pseudo' => $this->pseudo,
             'login' => $this->login,
             'email' => $this->email,
-            'roleId' => $this->roleId,
+        'role_id' => $this->role_id, // Changed key to snake_case
             // Do NOT include password here, for security
         ];
     }
@@ -38,7 +38,7 @@ class User
             $data['login'],
             '', // Password not stored in session
             $data['email'],
-            $data['roleId']
+            $data['role_id']
         );
     }
 }
