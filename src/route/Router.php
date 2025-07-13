@@ -14,6 +14,7 @@ class Router
     $this->routes['GET']['login'] = [UserController::class, 'login'];
     $this->routes['POST']['login'] = [UserController::class, 'handleLogin'];
 
+
     $this->routes['GET']['register'] = [UserController::class, 'register'];
     $this->routes['POST']['register'] = [UserController::class, 'handleRegister'];
 
@@ -22,7 +23,9 @@ class Router
     // Protected routes
     $this->routes['GET']['rooms'] = [RoomController::class, 'rooms'];
     $this->routes['GET']['chat'] = [RoomController::class, 'chat'];
-    $this->routes['POST']['createRoom'] = [RoomController::class, 'createRoom'];
+    $this->routes['GET']['createRoom'] = [RoomController::class, 'showCreateRoomForm'];
+    $this->routes['POST']['createRoom'] = [RoomController::class, 'handleCreateRoom'];
+    $this->routes['POST']['archiveRoom'] = [RoomController::class, 'archiveRoom'];
     $this->routes['POST']['sendMessage'] = [MessageController::class, 'sendMessage'];
   }
 

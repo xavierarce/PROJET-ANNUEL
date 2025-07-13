@@ -23,6 +23,7 @@ CREATE TABLE rooms (
     name VARCHAR(100) NOT NULL,
     is_visible BOOLEAN DEFAULT TRUE,
     is_private BOOLEAN DEFAULT FALSE,
+    is_archived BOOLEAN DEFAULT FALSE, 
     topic VARCHAR(255),
     FOREIGN KEY (owner_id) REFERENCES users(id),
     INDEX idx_owner_id (owner_id)
