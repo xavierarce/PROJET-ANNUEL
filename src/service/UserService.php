@@ -6,7 +6,7 @@ class UserService
     public function login(string $login, string $password): ?User
     {
         $user = UserDAO::findByLogin($login);
-        if ($user && password_verify($password, $user->password)) {
+        if ($user && $user->verifyPassword($password)) {
             return $user;
         }
         return null;

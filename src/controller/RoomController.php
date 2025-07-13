@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/../service/RoomService.php';
 require_once __DIR__ . '/../service/MessageService.php'; // Assuming you have this
+require_once __DIR__ . '/BaseController.php';
 
-class RoomController
+class RoomController extends BaseController
 {
     private RoomService $roomService;
 
@@ -13,10 +14,6 @@ class RoomController
 
     public function rooms()
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
-            exit;
-        }
 
         $rooms = $this->roomService->getAllVisibleRooms(); // update this method in RoomService/DAO
         require __DIR__ . '/../view/rooms.php';
@@ -26,7 +23,7 @@ class RoomController
     public function chat()
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
@@ -34,7 +31,7 @@ class RoomController
         $room = $this->roomService->getRoomById($roomId);
 
         if ($room === null || $room->is_archived) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
@@ -47,7 +44,7 @@ class RoomController
     public function showCreateRoomForm()
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
@@ -57,7 +54,7 @@ class RoomController
     public function handleCreateRoom()
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
@@ -67,7 +64,7 @@ class RoomController
 
         try {
             $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $is_private);
-            header('Location: index.php?action=rooms');
+            $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
             $error = $e->getMessage();
@@ -79,7 +76,7 @@ class RoomController
     public function archiveRoom()
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
@@ -100,7 +97,7 @@ class RoomController
             }
         }
 
-        header('Location: index.php?action=rooms');
+        $this->redirect('rooms');
         exit;
     }
 }

@@ -45,7 +45,7 @@ input:focus {
 
 button {
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   font-weight: 500;
   cursor: pointer;
   border: none;

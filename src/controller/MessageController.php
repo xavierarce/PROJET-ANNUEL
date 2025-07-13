@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . '/../service/MessageService.php';
+require_once __DIR__ . '/BaseController.php';
 
-class MessageController
+class MessageController extends BaseController
 {
 
   public function sendMessage()
   {
     if (!isset($_SESSION['user'])) {
-      header('Location: index.php?action=login');
+      $this->redirect('login');
+
       exit;
     }
     if (isset($_POST['message'], $_GET['id'])) {
@@ -18,7 +20,7 @@ class MessageController
         // handle error (show on view or log)
       }
     }
-    header('Location: index.php?action=chat&id=' . $_GET['id']);
+    $this->redirect('chat&id=' . $_GET['id']);
     exit;
   }
 }
