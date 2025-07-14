@@ -8,6 +8,7 @@ class DB
 
     public static function connect(): PDO
     {
+        error_log('DB CREDENTIALS' . getenv('DB_HOST') . ' - ' . getenv('DB_PORT') . ' ' . getenv('DB_NAME') . ' ' . getenv('DB_USER'));
         if (self::$pdo === null) {
             $host = getenv('DB_HOST');
             $port = getenv('DB_PORT') ?: '3306';
