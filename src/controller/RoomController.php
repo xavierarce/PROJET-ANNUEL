@@ -58,13 +58,15 @@ class RoomController extends BaseController
             exit;
         }
 
-        $name = $_POST['name'] ?? '';
-        $topic = $_POST['topic'] ?? '';
-        $is_private = isset($_POST['is_private']);
-        $is_visible = isset($_POST['is_visible']);
+        $name = trim($_POST['name'] ?? '');
+        $topic = trim($_POST['topic'] ?? '');
+        $isPrivate = isset($_POST['is_private']) && $_POST['is_private'] === '1';
+        $isVisibleRaw = $_POST['is_visible'] ?? '1';
+        $isVisible = $isVisibleRaw === '1' ? true : false;
+
 
         try {
-            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $is_private, $is_visible);
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate, $isVisible);
             $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
@@ -111,8 +113,9 @@ class RoomController extends BaseController
 
         $roomId = $_GET['id'] ?? null;
         $newName = trim($_POST['new_name'] ?? '');
-        $isPrivate = isset($_POST['is_private']);
-        $isVisible = isset($_POST['is_visible']) && $_POST['is_visible'] === '1';
+        $isPrivate = isset($_POST['is_private']) && $_POST['is_private'] === '1';
+        $isVisibleRaw = $_POST['is_visible'] ?? '1';
+        $isVisible = $isVisibleRaw === '1' ? true : false;
         $userId = $_SESSION['user']['id'];
 
         try {
