@@ -75,11 +75,17 @@ class RoomDAO
     );
   }
 
-  public static function insert(string $name, int $owner_id, string $topic, bool $is_private): ?int
+  public static function insert(string $name, int $owner_id, string $topic, bool $is_private, bool $is_visible): ?int
   {
     $db = DB::connect();
-    $stmt = $db->prepare('INSERT INTO rooms (name, owner_id, topic, is_private) VALUES (?, ?, ?, ?)');
-    $result = $stmt->execute([$name, $owner_id, $topic, $is_private ? 1 : 0]);
+    $stmt = $db->prepare('INSERT INTO rooms (name, owner_id, topic, is_private, is_visible) VALUES (?, ?, ?, ?, ?)');
+    $result = $stmt->execute([
+      $name,
+      $owner_id,
+      $topic,
+      $is_private ? 1 : 0,
+      $is_visible ? 1 : 0
+    ]);
 
     return $result ? (int)$db->lastInsertId() : null;
   }
@@ -97,8 +103,8 @@ class RoomDAO
     $stmt = $db->prepare('UPDATE rooms SET name = :name, is_private = :is_private, is_visible = :is_visible WHERE id = :id');
     return $stmt->execute([
       ':name' => $newName,
-      ':is_private' => $isPrivate,
-      ':is_visible' => $isVisible,
+      ':is_private' => $isPrivate ? 1 : 0,
+      ':is_visible' => $isVisible ? 1 : 0,
       ':id' => $roomId
     ]);
   }

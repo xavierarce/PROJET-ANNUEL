@@ -22,14 +22,14 @@ class RoomService
   /**
    * @throws Exception if validation fails
    */
-  public function createRoom(string $name, int $owner_id, string $topic = '', bool $is_private = false, $is_visible = true): int
+  public function createRoom(string $name, int $owner_id, string $topic = '', bool $is_private, $is_visible): int
   {
     $name = trim($name);
     if ($name === '') {
       throw new Exception('Le nom de la room est obligatoire.');
     }
 
-    $id = RoomDAO::insert($name, $owner_id, $topic, $is_private);
+    $id = RoomDAO::insert($name, $owner_id, $topic, $is_private, $is_visible);
     if ($id === null) {
       throw new Exception('Erreur lors de la création de la room.');
     }

@@ -11,12 +11,15 @@
 
       <div class="form-group checkbox-group">
         <label class="checkbox-label">
-          <input type="checkbox" name="is_private" value="0"> Privé
+          <input type="checkbox" name="is_private" value="1" <?= $room->is_private ? 'checked' : '' ?>> Privé
         </label>
       </div>
       <div class="form-group checkbox-group">
         <label class="checkbox-label">
-          <input type="checkbox" name="is_visible" value="1"> Caché
+          <!-- Hidden input to send default visible = 1 -->
+          <input type="hidden" name="is_visible" value="1" />
+          <!-- Checkbox sends hidden = 0 if checked -->
+          <input type="checkbox" name="is_visible" value="0" <?= !$room->is_visible ? 'checked' : '' ?>> Caché
         </label>
       </div>
 
