@@ -18,6 +18,7 @@ class RoomDAO
         (int)$row['owner_id'],
         $row['topic'],
         (bool)$row['is_private'],
+        (bool)$row['is_visible'],
         (bool)$row['is_archived']
       );
     }
@@ -27,21 +28,30 @@ class RoomDAO
   public static function fetchAllVisible(): array
   {
     $db = DB::connect();
-    $stmt = $db->query("SELECT * FROM rooms WHERE is_archived = 0 ORDER BY id DESC");
+    $stmt = $db->prepare("SELECT * FROM rooms WHERE is_archived = :archived AND is_visible = :visible ORDER BY id DESC");
+    $stmt->execute([
+      'archived' => 0,
+      'visible' => 1,
+    ]);
+
+    $roomsData = $stmt->fetchAll();
     $rooms = [];
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($roomsData as $row) {
       $rooms[] = new Room(
         (int)$row['id'],
         $row['name'],
         (int)$row['owner_id'],
         $row['topic'],
         (bool)$row['is_private'],
+        (bool)$row['is_visible'],
         (bool)$row['is_archived']
       );
     }
+
     return $rooms;
   }
+
 
   public static function fetchById(int $id): ?Room
   {
@@ -60,6 +70,7 @@ class RoomDAO
       (int)$row['owner_id'],
       $row['topic'],
       (bool)$row['is_private'],
+      (bool)$row['is_visible'],
       (bool)$row['is_archived']
     );
   }
@@ -80,13 +91,14 @@ class RoomDAO
     $stmt->execute([$roomId]);
   }
 
-  public static function updateRoom(int $roomId, string $newName, bool $isPrivate): bool
+  public static function updateRoom(int $roomId, string $newName, bool $isPrivate, bool $isVisible): bool
   {
     $db = DB::connect();
-    $stmt = $db->prepare('UPDATE rooms SET name = :name, is_private = :is_private WHERE id = :id');
+    $stmt = $db->prepare('UPDATE rooms SET name = :name, is_private = :is_private, is_visible = :is_visible WHERE id = :id');
     return $stmt->execute([
       ':name' => $newName,
-      ':is_private' => $isPrivate ? 1 : 0,
+      ':is_private' => $isPrivate,
+      ':is_visible' => $isVisible,
       ':id' => $roomId
     ]);
   }

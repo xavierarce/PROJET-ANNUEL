@@ -22,7 +22,7 @@ class RoomService
   /**
    * @throws Exception if validation fails
    */
-  public function createRoom(string $name, int $owner_id, string $topic = '', bool $is_private = false): int
+  public function createRoom(string $name, int $owner_id, string $topic = '', bool $is_private = false, $is_visible = true): int
   {
     $name = trim($name);
     if ($name === '') {
@@ -41,7 +41,7 @@ class RoomService
     RoomDAO::archive($roomId);
   }
 
-  public static function updateRoom(int $roomId, int $userId, string $newName, bool $isPrivate): void
+  public static function updateRoom(int $roomId, int $userId, string $newName, bool $isPrivate, bool $isVisible): void
   {
     if (!$roomId || $newName === '') {
       throw new Exception("Nom invalide.");
@@ -57,7 +57,7 @@ class RoomService
       throw new Exception("Action non autorisée.");
     }
 
-    $updated = RoomDAO::updateRoom($roomId, $newName, $isPrivate);
+    $updated = RoomDAO::updateRoom($roomId, $newName, $isPrivate, $isVisible);
     if (!$updated) {
       throw new Exception("Erreur lors de la mise à jour du salon.");
     }
