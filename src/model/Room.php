@@ -6,6 +6,7 @@ class Room
     public int $owner_id;
     public string $topic;
     public bool $is_private;
+    private ?string $password;
     public bool $is_visible;
     public bool $is_archived;
 
@@ -16,7 +17,8 @@ class Room
         string $topic,
         bool $is_private,
         bool $is_visible,
-        bool $is_archived = false
+        bool $is_archived = false,
+        ?string $password = null
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -25,5 +27,12 @@ class Room
         $this->is_private = $is_private;
         $this->is_visible = $is_visible;
         $this->is_archived = $is_archived;
+        $this->password = $password;
+    }
+
+    public function checkPassword(string $input): bool
+    {
+        if ($this->password === null) return true;
+        return password_verify($input, $this->password);
     }
 }

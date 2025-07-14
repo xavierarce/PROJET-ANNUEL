@@ -11,10 +11,14 @@
     </div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label">
-        <!-- Value 1 means private when checked -->
-        <input type="checkbox" name="is_private" value="1"> Privé
+        <input type="checkbox" name="is_private" value="1" id="is_private_checkbox"> Privé
       </label>
     </div>
+
+    <div class="form-group" id="password_group" style="display: none;">
+      <input type="password" name="password" placeholder="Mot de passe du salon">
+    </div>
+
     <div class="form-group checkbox-group">
       <label class="checkbox-label">
         <!-- Hidden input sends visible=1 by default -->
@@ -31,3 +35,17 @@
 
   <a href="index.php?action=rooms" class="link-back">← Retour aux rooms</a>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const privateCheckbox = document.getElementById('is_private_checkbox');
+    const passwordGroup = document.getElementById('password_group');
+
+    function togglePasswordField() {
+      passwordGroup.style.display = privateCheckbox.checked ? 'block' : 'none';
+    }
+
+    privateCheckbox.addEventListener('change', togglePasswordField);
+    togglePasswordField();
+  });
+</script>

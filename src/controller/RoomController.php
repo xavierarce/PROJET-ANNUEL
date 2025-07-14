@@ -31,8 +31,20 @@ class RoomController extends BaseController
         $room = $this->roomService->getRoomById($roomId);
 
         if ($room === null || $room->is_archived) {
-            $this->redirect('login');
+            $this->redirect('rooms');
             exit;
+        }
+
+        // Check if room is private and requires password verification
+        if ($room->is_private) {
+            // Check if user has already verified password for this room in this session
+            $verifiedRooms = $_SESSION['verified_rooms'] ?? [];
+
+            if (!in_array($roomId, $verifiedRooms)) {
+                // Redirect to password verification
+                require __DIR__ . '/../view/roomPassword.php';
+                return;
+            }
         }
 
         $messages = MessageService::getMessagesByRoom($roomId);
@@ -63,10 +75,11 @@ class RoomController extends BaseController
         $isPrivate = isset($_POST['is_private']) && $_POST['is_private'] === '1';
         $isVisibleRaw = $_POST['is_visible'] ?? '1';
         $isVisible = $isVisibleRaw === '1' ? true : false;
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
 
 
         try {
-            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate, $isVisible);
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $isPrivate, $isVisible, $password, $topic);
             $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
@@ -117,9 +130,11 @@ class RoomController extends BaseController
         $isVisibleRaw = $_POST['is_visible'] ?? '1';
         $isVisible = $isVisibleRaw === '1' ? true : false;
         $userId = $_SESSION['user']['id'];
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
+
 
         try {
-            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate, $isVisible);
+            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate, $isVisible, $password);
             $_SESSION['success'] = "Salon mis à jour.";
             $this->redirect('chat&id=' . urlencode($roomId));
         } catch (Exception $e) {
@@ -128,5 +143,35 @@ class RoomController extends BaseController
         }
 
         exit;
+    }
+
+    public function verifyRoomPassword()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->redirect('login');
+            exit;
+        }
+
+        $roomId = (int)($_POST['room_id'] ?? 0);
+        $password = $_POST['password'] ?? '';
+
+        $room = $this->roomService->getRoomById($roomId);
+
+        if ($room === null || $room->is_archived) {
+            $this->redirect('rooms');
+            exit;
+        }
+
+        if ($room->checkPassword($password)) {
+            if (!isset($_SESSION['verified_rooms'])) {
+                $_SESSION['verified_rooms'] = [];
+            }
+            $_SESSION['verified_rooms'][] = $roomId;
+
+            $this->redirect('chat&id=' . $roomId);
+        } else {
+            $error = "Mot de passe incorrect.";
+            require __DIR__ . '/../view/roomPassword.php';
+        }
     }
 }

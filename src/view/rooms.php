@@ -11,11 +11,15 @@
         <li class="Room-item">
           <a href="index.php?action=chat&id=<?= $room->id ?>">
             <?= htmlspecialchars($room->name) ?>
+            <?php if ($room->is_private): ?>
+              <span class="private-indicator">🔒</span>
+            <?php endif; ?>
           </a>
 
           <?php if (isset($_SESSION['user']) && isset($_SESSION['user']['role_id']) && $_SESSION['user']['role_id'] === 1): ?>
-            <input type="hidden" name="room_id" value="<?= $room->id ?>">
-            <button type="submit" class="button danger" onclick="return confirm('Supprimer ce salon ?')">🗑️</button>
+            <form method="post" action="index.php?action=archiveRoom" style="display: inline;">
+              <input type="hidden" name="room_id" value="<?= $room->id ?>">
+              <button type="submit" class="button danger" onclick="return confirm('Supprimer ce salon ?')">🗑️</button>
             </form>
           <?php endif; ?>
         </li>
