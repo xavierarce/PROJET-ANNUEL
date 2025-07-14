@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Mini Chat Web</title>
+    <title>Chat Web 2.0</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
