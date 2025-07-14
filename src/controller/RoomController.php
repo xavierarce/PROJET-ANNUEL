@@ -31,8 +31,20 @@ class RoomController extends BaseController
         $room = $this->roomService->getRoomById($roomId);
 
         if ($room === null || $room->is_archived) {
-            $this->redirect('login');
+            $this->redirect('rooms');
             exit;
+        }
+
+        // Check if room is private and requires password verification
+        if ($room->is_private) {
+            // Check if user has already verified password for this room in this session
+            $verifiedRooms = $_SESSION['verified_rooms'] ?? [];
+
+            if (!in_array($roomId, $verifiedRooms)) {
+                // Redirect to password verification
+                require __DIR__ . '/../view/roomPassword.php';
+                return;
+            }
         }
 
         $messages = MessageService::getMessagesByRoom($roomId);
@@ -67,7 +79,7 @@ class RoomController extends BaseController
 
 
         try {
-            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate, $isVisible, $password);
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $isPrivate, $isVisible, $password, $topic);
             $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
@@ -131,5 +143,35 @@ class RoomController extends BaseController
         }
 
         exit;
+    }
+
+    public function verifyRoomPassword()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->redirect('login');
+            exit;
+        }
+
+        $roomId = (int)($_POST['room_id'] ?? 0);
+        $password = $_POST['password'] ?? '';
+
+        $room = $this->roomService->getRoomById($roomId);
+
+        if ($room === null || $room->is_archived) {
+            $this->redirect('rooms');
+            exit;
+        }
+
+        if ($room->checkPassword($password)) {
+            if (!isset($_SESSION['verified_rooms'])) {
+                $_SESSION['verified_rooms'] = [];
+            }
+            $_SESSION['verified_rooms'][] = $roomId;
+
+            $this->redirect('chat&id=' . $roomId);
+        } else {
+            $error = "Mot de passe incorrect.";
+            require __DIR__ . '/../view/roomPassword.php';
+        }
     }
 }
