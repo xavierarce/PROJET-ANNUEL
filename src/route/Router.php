@@ -31,6 +31,7 @@ class Router
         'createRoom'  => [RoomController::class, 'handleCreateRoom'],
         'archiveRoom' => [RoomController::class, 'archiveRoom'],
         'sendMessage' => [MessageController::class, 'sendMessage'],
+        'updateRoom' => [RoomController::class, 'updateRoom'],
       ],
     ];
   }

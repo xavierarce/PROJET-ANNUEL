@@ -1,5 +1,3 @@
-console.log("Chat script loaded");
-
 const socket = new WebSocket("ws://localhost:8081");
 
 socket.addEventListener("open", () => {
