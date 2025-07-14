@@ -9,12 +9,15 @@
         <input type="text" id="new_name" name="new_name" value="<?= htmlspecialchars($room->name) ?>" required />
       </div>
 
-      <div class="form-group">
-        <label for="is_private">Salon privé :</label>
-        <select id="is_private" name="is_private">
-          <option value="0" <?= !$room->is_private ? 'selected' : '' ?>>Non</option>
-          <option value="1" <?= $room->is_private ? 'selected' : '' ?>>Oui</option>
-        </select>
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="is_private" value="0"> Privé
+        </label>
+      </div>
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="is_visible" value="1"> Caché
+        </label>
       </div>
 
       <div class="modal-actions">

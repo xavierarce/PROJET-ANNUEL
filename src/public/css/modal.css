@@ -46,3 +46,33 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.room-title {
+  flex: 1;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.edit-room-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-room-icon {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.2s;
+  padding: 0.2rem 0.4rem;
+  width: fit-content;
+  color: #444;
+}

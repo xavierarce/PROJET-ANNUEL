@@ -61,9 +61,10 @@ class RoomController extends BaseController
         $name = $_POST['name'] ?? '';
         $topic = $_POST['topic'] ?? '';
         $is_private = isset($_POST['is_private']);
+        $is_visible = isset($_POST['is_visible']);
 
         try {
-            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $is_private);
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $is_private, $is_visible);
             $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
@@ -104,22 +105,23 @@ class RoomController extends BaseController
     public function updateRoom(): void
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: index.php?action=login');
+            $this->redirect('login');
             exit;
         }
 
         $roomId = $_GET['id'] ?? null;
         $newName = trim($_POST['new_name'] ?? '');
-        $isPrivate = isset($_POST['is_private']) ? (bool)$_POST['is_private'] : false;
+        $isPrivate = isset($_POST['is_private']);
+        $isVisible = isset($_POST['is_visible']) && $_POST['is_visible'] === '1';
         $userId = $_SESSION['user']['id'];
 
         try {
-            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate);
+            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate, $isVisible);
             $_SESSION['success'] = "Salon mis à jour.";
-            header("Location: index.php?action=chat&id=" . urlencode($roomId));
+            $this->redirect('chat&id=' . urlencode($roomId));
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            header("Location: index.php?action=chat&id=" . urlencode($roomId));
+            $this->redirect('chat&id=' . urlencode($roomId));
         }
 
         exit;
