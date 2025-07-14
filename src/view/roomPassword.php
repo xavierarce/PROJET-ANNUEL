@@ -24,7 +24,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="button">Accéder au salon</button>
+        <button type="submit" class="button" data-loading-text="Vérification...">Accéder au salon</button>
         <a href="index.php?action=rooms" class="button secondary">Retour aux salons</a>
       </div>
     </form>
