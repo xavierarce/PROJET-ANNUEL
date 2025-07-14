@@ -63,10 +63,11 @@ class RoomController extends BaseController
         $isPrivate = isset($_POST['is_private']) && $_POST['is_private'] === '1';
         $isVisibleRaw = $_POST['is_visible'] ?? '1';
         $isVisible = $isVisibleRaw === '1' ? true : false;
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
 
 
         try {
-            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate, $isVisible);
+            $this->roomService->createRoom($name, $_SESSION['user']['id'], $topic, $isPrivate, $isVisible, $password);
             $this->redirect('rooms');
             exit;
         } catch (Exception $e) {
@@ -117,9 +118,11 @@ class RoomController extends BaseController
         $isVisibleRaw = $_POST['is_visible'] ?? '1';
         $isVisible = $isVisibleRaw === '1' ? true : false;
         $userId = $_SESSION['user']['id'];
+        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
+
 
         try {
-            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate, $isVisible);
+            RoomService::updateRoom((int)$roomId, $userId, $newName, $isPrivate, $isVisible, $password);
             $_SESSION['success'] = "Salon mis à jour.";
             $this->redirect('chat&id=' . urlencode($roomId));
         } catch (Exception $e) {

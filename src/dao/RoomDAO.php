@@ -19,7 +19,8 @@ class RoomDAO
         $row['topic'],
         (bool)$row['is_private'],
         (bool)$row['is_visible'],
-        (bool)$row['is_archived']
+        (bool)$row['is_archived'],
+        $row['password'] ?? null
       );
     }
     return $rooms;
@@ -45,7 +46,9 @@ class RoomDAO
         $row['topic'],
         (bool)$row['is_private'],
         (bool)$row['is_visible'],
-        (bool)$row['is_archived']
+        (bool)$row['is_archived'],
+        $row['password'] ?? null
+
       );
     }
 
@@ -71,24 +74,29 @@ class RoomDAO
       $row['topic'],
       (bool)$row['is_private'],
       (bool)$row['is_visible'],
-      (bool)$row['is_archived']
+      (bool)$row['is_archived'],
+      $row['password'] ?? null
     );
   }
 
-  public static function insert(string $name, int $owner_id, string $topic, bool $is_private, bool $is_visible): ?int
+  public static function insert(string $name, int $owner_id, string $topic, bool $is_private, bool $is_visible, ?string $password): ?int
   {
     $db = DB::connect();
-    $stmt = $db->prepare('INSERT INTO rooms (name, owner_id, topic, is_private, is_visible) VALUES (?, ?, ?, ?, ?)');
+    $stmt = $db->prepare('INSERT INTO rooms (name, owner_id, topic, is_private, is_visible, password) VALUES (?, ?, ?, ?, ?, ?)');
+    $hashedPassword = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
+
     $result = $stmt->execute([
       $name,
       $owner_id,
       $topic,
       $is_private ? 1 : 0,
-      $is_visible ? 1 : 0
+      $is_visible ? 1 : 0,
+      $hashedPassword
     ]);
 
     return $result ? (int)$db->lastInsertId() : null;
   }
+
 
   public static function archive(int $roomId): void
   {
@@ -97,14 +105,16 @@ class RoomDAO
     $stmt->execute([$roomId]);
   }
 
-  public static function updateRoom(int $roomId, string $newName, bool $isPrivate, bool $isVisible): bool
+  public static function updateRoom(int $roomId, string $newName, bool $isPrivate, bool $isVisible, ?string $password): bool
   {
     $db = DB::connect();
-    $stmt = $db->prepare('UPDATE rooms SET name = :name, is_private = :is_private, is_visible = :is_visible WHERE id = :id');
+    $stmt = $db->prepare('UPDATE rooms SET name = :name, is_private = :is_private, is_visible = :is_visible, password = :password WHERE id = :id');
+    $hashedPassword = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
     return $stmt->execute([
       ':name' => $newName,
       ':is_private' => $isPrivate ? 1 : 0,
       ':is_visible' => $isVisible ? 1 : 0,
+      ':password' => $hashedPassword,
       ':id' => $roomId
     ]);
   }
