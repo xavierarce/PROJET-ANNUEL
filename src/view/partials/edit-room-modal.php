@@ -29,7 +29,7 @@
       </div>
 
       <div class="modal-actions">
-        <button type="submit" class="button">Enregistrer</button>
+        <button type="submit" class="button" data-loading-text="Sauvegarde...">Enregistrer</button>
         <button type="button" class="button-cancel" id="closeModal">Annuler</button>
       </div>
     </form>
@@ -37,15 +37,15 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const privateCheckbox = document.getElementById('is_private_checkbox');
-  const passwordGroup = document.getElementById('password_group');
+  document.addEventListener('DOMContentLoaded', function() {
+    const privateCheckbox = document.getElementById('is_private_checkbox');
+    const passwordGroup = document.getElementById('password_group');
 
-  function togglePasswordField() {
-    passwordGroup.style.display = privateCheckbox.checked ? 'block' : 'none';
-  }
+    function togglePasswordField() {
+      passwordGroup.style.display = privateCheckbox.checked ? 'block' : 'none';
+    }
 
-  privateCheckbox.addEventListener('change', togglePasswordField);
-  togglePasswordField();
-});
+    privateCheckbox.addEventListener('change', togglePasswordField);
+    togglePasswordField();
+  });
 </script>

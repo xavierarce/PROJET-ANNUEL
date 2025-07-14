@@ -27,7 +27,7 @@
         <input type="checkbox" name="is_visible" value="0"> Caché
       </label>
     </div>
-    <button class="button" type="submit">Créer</button>
+    <button class="button" type="submit" data-loading-text="Création...">Créer</button>
 
     <?php if (!empty($error)) echo '<div class="error">' . htmlspecialchars($error) . '</div>'; ?>
     <?php if (!empty($success)) echo '<div class="success">' . htmlspecialchars($success) . '</div>'; ?>

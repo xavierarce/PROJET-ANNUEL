@@ -30,7 +30,7 @@
 
   <form method="post" action="index.php?action=sendMessage&id=<?= $room->id ?>" class="chat-form">
     <input name="message" placeholder="Votre message..." required autocomplete="off" />
-    <button class="button" type="submit">Envoyer</button>
+    <button class="button" type="submit" data-loading-text="Envoi...">Envoyer</button>
   </form>
 
   <a href="index.php?action=rooms" class="link-back">← Retour aux salons</a>
@@ -39,6 +39,19 @@
 <script>
   const roomId = <?= json_encode($room->id) ?>;
   const userPseudo = <?= json_encode($_SESSION['user']['pseudo']) ?>;
+
+  // Enhanced chat form handling
+  document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.querySelector('.chat-form');
+    const messageInput = chatForm.querySelector('input[name="message"]');
+
+    chatForm.addEventListener('submit', function(e) {
+      // Clear the input immediately for better UX
+      setTimeout(() => {
+        messageInput.value = '';
+      }, 100);
+    });
+  });
 </script>
 <script src="/js/script.js"></script>
 <script src="/js/modal.js"></script>

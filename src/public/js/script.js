@@ -19,6 +19,11 @@ socket.addEventListener("message", (event) => {
 
     messagesDiv.appendChild(messageEl);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    // Reset loading state when message appears
+    if (typeof LoadingManager !== "undefined") {
+      LoadingManager.resetChatLoading();
+    }
   }
 });
 
@@ -45,8 +50,21 @@ form.addEventListener("submit", function (event) {
       };
       socket.send(JSON.stringify(msgData));
       input.value = "";
+
+      // Reset loading state immediately after successful send
+      if (typeof LoadingManager !== "undefined") {
+        setTimeout(() => {
+          LoadingManager.resetChatLoading();
+        }, 200);
+      }
     })
-    .catch(console.error);
+    .catch((error) => {
+      console.error(error);
+      // Reset loading state on error
+      if (typeof LoadingManager !== "undefined") {
+        LoadingManager.resetChatLoading();
+      }
+    });
 });
 
 function escapeHtml(text) {

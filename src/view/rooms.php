@@ -19,7 +19,7 @@
           <?php if (isset($_SESSION['user']) && isset($_SESSION['user']['role_id']) && $_SESSION['user']['role_id'] === 1): ?>
             <form method="post" action="index.php?action=archiveRoom" style="display: inline;">
               <input type="hidden" name="room_id" value="<?= $room->id ?>">
-              <button type="submit" class="button danger" onclick="return confirm('Supprimer ce salon ?')">🗑️</button>
+              <button type="submit" class="button danger" data-loading-text="Suppression..." data-confirm="Supprimer ce salon ?">🗑️</button>
             </form>
           <?php endif; ?>
         </li>
